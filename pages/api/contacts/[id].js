@@ -1,23 +1,25 @@
 import Contact from "@/models/Contact"
-import mongoose from "mongoose"
+import connectDB from "@/utils/connectDB"
+import { isValidObjectId } from "mongoose"
 
+const handler = async (req,res)=>{
+    connectDB()
 
-
-const handler = async (req,res) => {
-
-  mongoose.connect('mongodb://localhost:27017/contact-list')
-    .then(()=> {
-        if(mongoose.connections[0].readyState){
-            return
-            console.log("connect to DB successfully")
+    if(req.method == 'GET'){
+        const {id} = req.query
+        
+        if(isValidObjectId(id)){
+            const contact = await Contact.findById(id)
+            if(contact){
+                res.status(200).json(contact)
+            }else{
+                res.status(404).json({message: 'Contact did not found'})
+            }
+            
+        }else{
+            res.status(404).json({message: 'Contact ID is invalid'})
         }
-    })
-    .catch((err)=>console.log(err))
-   if(req.method == 'GET'){
-    const {id} = req.query
-    const contact = await Contact.findById(id)
-    res.status(200).json(contact)
-   } 
+        
+    }
 }
-
 export default handler

@@ -1,20 +1,12 @@
+
 import Contact from "@/models/Contact"
-import mongoose from "mongoose"
+import connectDB from "@/utils/connectDB"
 
-
-const handler = async (req,res) => {
-    mongoose.connect('mongodb://localhost:27017/contact-list')
-    .then(()=> {
-        if(mongoose.connections[0].readyState){
-            return
-            console.log("connect to DB successfully")
-        }
-    })
-    .catch((err)=>console.log(err))
-   if(req.method == 'GET'){
-     const contacts = await Contact.find()
-    res.status(200).json(contacts)
-   }
+const handler = async (req,res)=>{
+    connectDB()
+    if(req.method == 'GET'){
+        const contacts = await Contact.find()
+        res.status(200).json(contacts)
+    }
 }
-
 export default handler
