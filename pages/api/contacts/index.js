@@ -5,7 +5,28 @@ import connectDB from "@/utils/connectDB"
 const handler = async (req,res)=>{
     connectDB()
     if(req.method == 'GET'){
-        const contacts = await Contact.find()
+        let contacts = null
+        const {gen,search} = req.query
+
+        if(gen && search){
+            contacts = await Contact.find({$and:[{gender:gen},{$or:[{firstName:search},{lastName:search}]}]})
+        }else if(gen){
+            if(gen == 'male'){
+                contacts = await Contact.find({gender: 'male'})
+            }else if(gen == 'female'){
+                contacts = await Contact.find({gender: 'female'})
+            }else{
+                contacts = await Contact.find()
+            }
+        }else if(search){
+            contacts = await Contact.find({$or: [{firstName: search},{lastName:search}]})
+            if(contacts==false){
+                contacts = await Contact.find()
+            }
+        }else{
+            contacts = await Contact.find()
+        }
+
         res.status(200).json(contacts)
     }else if(req.method == 'POST'){
         try {
@@ -14,7 +35,6 @@ const handler = async (req,res)=>{
         } catch (error) {
             res.status(422).json({message: error.message})
         }
-        
     }
 }
 export default handler
