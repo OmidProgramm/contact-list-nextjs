@@ -22,7 +22,7 @@ const handler = async (req,res)=>{
                 res.status(404).json({message: 'Contact did not found'})
             }
         }else if(req.method == 'PUT'){
-            const result = await Contact.findByIdAndUpdate(id)
+            const result = await Contact.findByIdAndUpdate(id,req.body)
             console.log(result)
             res.status(200).json({message: 'Contact updated successfully.'})
         }
