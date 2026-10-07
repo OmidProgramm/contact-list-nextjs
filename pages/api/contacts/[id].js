@@ -21,6 +21,10 @@ const handler = async (req,res)=>{
             }else{
                 res.status(404).json({message: 'Contact did not found'})
             }
+        }else if(req.method == 'PUT'){
+            const result = await Contact.findByIdAndUpdate(id)
+            console.log(result)
+            res.status(200).json({message: 'Contact updated successfully.'})
         }
     }else{
         res.status(404).json({message: 'Contact ID is invalid'})
