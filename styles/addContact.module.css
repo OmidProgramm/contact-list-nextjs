@@ -1,0 +1,31 @@
+.container{
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container form{
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    color: rgb(57,57,57);
+    font-size: 14px;
+}
+.container input, .container select, .container button{
+    all: unset;
+    border-radius: 5px;
+    padding: 10px;
+}
+.container input{
+    border: 1px solid gray;
+}
+.container select{
+    border: 1px solid gray;
+}
+.container button{
+    text-align: center;
+    background-color: rgb(3,157,3);
+    font-weight: 600;
+    color: white;
+}
