@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
+import { ImSpinner7 } from "react-icons/im";
 import styles from '../../styles/addContact.module.css'
 
 const AddConntact = () => {
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     firstName:'',
     lastName:'',
@@ -12,15 +14,21 @@ const AddConntact = () => {
   })
   const addContactHandler = async (e)=>{
     e.preventDefault()
+    
     const {firstName,lastName, age, gender, phone} = formData
     if(firstName &&lastName && age && gender && phone){
+      setLoading(true)
       const res = await fetch("http://localhost:3000/api/contacts",{
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(formData)
       })
       const data = await res.json()
+      setLoading(false)
       if(res.status ==422){
+        return toast.error(data.message)
+      }
+      if(res.status ==500){
         return toast.error(data.message)
       }
       toast.success("new Contact added successfully.")
@@ -50,7 +58,10 @@ const AddConntact = () => {
           <input type="text" name='phone' placeholder='your Phone'
           onChange={(e)=>setFormData({...formData,phone:e.target.value})}
           />
-          <button onClick={addContactHandler}>Add to Cantact</button>
+          <button onClick={addContactHandler}>
+            Add to Cantact 
+            { loading ? <ImSpinner7 className={styles.spin}/> : ''}
+          </button>
         </form>
       </div>
     </>
