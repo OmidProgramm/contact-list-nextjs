@@ -20,7 +20,9 @@ const AddConntact = () => {
         body: JSON.stringify(formData)
       })
       const data = await res.json()
-      console.log(data)
+      if(res.status ==422){
+        return toast.error(data.message)
+      }
       toast.success("new Contact added successfully.")
     }else{
       toast.error("please fill in all fileds")
@@ -28,7 +30,7 @@ const AddConntact = () => {
   }
   return (
     <>
-    <Toaster/>
+    <Toaster position='top-right'/>
       <div className={styles.container}>
         <form>
           <input type="text" name='firstName' placeholder='First Name'
