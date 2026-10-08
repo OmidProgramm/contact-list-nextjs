@@ -26,15 +26,21 @@ const handler = async (req,res)=>{
         }else{
             contacts = await Contact.find()
         }
-
         res.status(200).json(contacts)
     }else if(req.method == 'POST'){
         try {
             const contact = await Contact.create(req.body)
             res.status(201).json({message: 'Contact added successfully.'})
         } catch (error) {
-            res.status(422).json({message: error.message})
+            if(error.name == 'ValidationError'){
+                let errorMessage = ''
+                Object.values(error.errors).map(err=>errorMessage += err.message + `\n`)
+                return res.status(422).json({message: errorMessage})
+            }
+            res.status(500).json({message:'Server not found'})
         }
+    }else{
+        res.status(405).json({message:'Method does not allowed'})
     }
 }
 export default handler

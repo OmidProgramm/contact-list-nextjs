@@ -3,7 +3,9 @@
 export default function Home() {
   return (
     <>
-      <h3>Contact List</h3>
+     <div style={{textAlign:'center',paddingTop:'40px'}}>
+         <h3>Contact List</h3>
+     </div>
     </>
   );
 }
