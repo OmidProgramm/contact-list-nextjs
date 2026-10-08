@@ -17,10 +17,7 @@
     border-radius: 5px;
     padding: 10px;
 }
-.container input{
-    border: 1px solid gray;
-}
-.container select{
+.container input, .container select{
     border: 1px solid gray;
 }
 .container button{
