@@ -31,7 +31,7 @@ const Contacts = ({contactsList}) => {
         <>
           {
             contacts.map((contact)=>(
-              <ContactItem key={contact._id} {...contact}/>
+              <ContactItem key={contact._id} {...contact} contacts={contacts} setContacts={setContacts}/>
             ))
           }
         </>
