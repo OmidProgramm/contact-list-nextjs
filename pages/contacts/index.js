@@ -1,4 +1,6 @@
 import ContactItem from '@/components/contact/contactItem'
+import Contact from '@/models/Contact'
+import connectDB from '@/utils/connectDB'
 import React from 'react'
 
 const Contacts = ({contacts}) => {
@@ -17,9 +19,11 @@ const Contacts = ({contacts}) => {
 
 export default Contacts
 export async function getServerSideProps(){
-  const res = await fetch("http://localhost:3000/api/contacts")
-  const data = await res.json()
+  await connectDB()
+  const contacts = await Contact.find().lean()
+  /* const res = await fetch("http://localhost:3000/api/contacts")
+  const data = await res.json() */
   return {
-    props: {contacts:data}
+    props: {contacts: JSON.parse(JSON.stringify(contacts))}
   }
 }
