@@ -2,38 +2,39 @@ import Link from 'next/link'
 import React from 'react'
 import { AiFillEdit } from 'react-icons/ai'
 import { MdDeleteForever, MdOutlineFavoriteBorder } from 'react-icons/md'
+import styles from './contactItem.module.css'
 
-const ContactItem = () => {
+const ContactItem = ({_id,firstName, lastName, age, gender,phone}) => {
   return (
-    <div className='card'>
+    <div className={styles.card}>
         <div className="name">
-            <b>FirstName: </b> Person
+            <b>FirstName: </b> {firstName}
         </div>
         <div className="family">
-            <b>LastName: </b> Person
+            <b>LastName: </b> {lastName}
         </div>
         <div className="gender">
-            <b>Gender: </b> Male
+            <b>Gender: </b> {gender}
         </div>
         <div className="age">
-            <b>Age: </b> 18
+            <b>Age: </b> {age}
         </div>
         <div className="phone">
-            <b>Phone: </b> 0123456789
+            <b>Phone: </b> {phone}
         </div>
-        <div className="icons">
-            <MdDeleteForever/>
+        <div className={styles.icons}>
+                <div className="delete">
+                    <MdDeleteForever/>
+                </div>
+            <div className="edit">
+                <Link href='#'>
+                    <AiFillEdit/>
+                </Link>
+            </div>
+            <div className="favorite">
+                <MdOutlineFavoriteBorder/>
+            </div>
         </div>
-        <div className="edit">
-            <Link href='#'>
-                <AiFillEdit/>
-            </Link>
-            
-        </div>
-        <div className="favorite">
-            <MdOutlineFavoriteBorder/>
-        </div>
-
     </div>
   )
 }
