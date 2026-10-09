@@ -16,7 +16,25 @@ const AddConntact = () => {
     e.preventDefault()
     
     const {firstName,lastName, age, gender, phone} = formData
-    if(firstName &&lastName && age && gender && phone){
+    if(!firstName || !lastName || !age || !gender || !phone){
+      return toast.error('please fill in filed')
+    }
+    let errorMessage = ''
+    if(firstName.length < 3 || firstName.length > 15){
+      errorMessage += "Name length must be between 3 and 15 char" + " \n"
+    }
+    if(lastName.length < 3 || lastName.length > 15){
+      errorMessage += "Last Name length must be between 3 and 15 char" + " \n"
+    }
+    if(age < 18 ){
+      errorMessage += "Age must be bigger than 18" + " \n"
+    }
+    if(phone.length < 11 || !phone.match(/0\d{9}/)){
+      errorMessage += "Phone Number is invalid" + " \n"
+    }
+    if(errorMessage){
+      return toast.error(errorMessage)
+    }
       setLoading(true)
       const res = await fetch("http://localhost:3000/api/contacts",{
         method: "POST",
@@ -32,9 +50,15 @@ const AddConntact = () => {
         return toast.error(data.message)
       }
       toast.success("new Contact added successfully.")
-    }else{
-      toast.error("please fill in all fileds")
-    }
+      setFormData(
+        {
+          firstName:'',
+          lastName:'',
+          age:'',
+          gender:'',
+          phone:''
+        }
+      )
   }
   return (
     <>
