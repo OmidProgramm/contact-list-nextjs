@@ -48,7 +48,7 @@ const ContactItem = ({_id,firstName, lastName, age, gender,phone,contacts,setCon
                             <MdDeleteForever onClick={()=>deleteContactHandler(_id)}/>
                         </div>
                     <div className="edit">
-                        <Link href='#'>
+                        <Link href={`/contacts/edit/${_id}`}>
                             <AiFillEdit/>
                         </Link>
                     </div>

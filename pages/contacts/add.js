@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
 import { ImSpinner7 } from "react-icons/im";
-import styles from '../../styles/addContact.module.css'
+import styles from '@/styles/addContact.module.css'
 
 const AddConntact = () => {
   const [loading, setLoading] = useState(false)
@@ -29,7 +29,7 @@ const AddConntact = () => {
     if(age < 18 ){
       errorMessage += "Age must be bigger than 18" + " \n"
     }
-    if(phone.length < 11 || !phone.match(/0\d{9}/)){
+    if(phone.length > 11 || !phone.match(/0\d{9}/)){
       errorMessage += "Phone Number is invalid" + " \n"
     }
     if(errorMessage){
