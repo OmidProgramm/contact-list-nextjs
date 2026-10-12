@@ -3,6 +3,7 @@ import Contact from '@/models/Contact'
 import connectDB from '@/utils/connectDB'
 import React, { useState } from 'react'
 import styles from '@/styles/Contacts.module.css'
+import toast, { Toaster } from 'react-hot-toast';
 
 const Contacts = ({contactsList}) => {
   const [contacts, setContacts] = useState(contactsList)
@@ -10,13 +11,18 @@ const Contacts = ({contactsList}) => {
   const [searchGen, setSearchGen] = useState('')
 
   const searchHandler = async ()=>{
-    const res = await fetch(`/api/contacts?gen=${searchGen}&search=${searchKey}`)
-    const data = await res.json()
-    setContacts(data)
+    try {
+      const res = await fetch(`/api/contacts?gen=${searchGen}&search=${searchKey}`)
+      const data = await res.json()
+      setContacts(data)
+    } catch (error) {
+      toast.error("Server Error")
+    }
   }
 
   return (
     <>
+    <Toaster position='top-right'/>
     <div className={styles.searchContainer}>
       <input type="text" placeholder='enter name or family' onChange={(e)=>setSearchKey(e.target.value)} />
       <select onChange={(e)=>setSearchGen(e.target.value)}>
