@@ -1,14 +1,22 @@
 import ContactItem from '@/components/contact/contactItem'
 import Contact from '@/models/Contact'
 import connectDB from '@/utils/connectDB'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '@/styles/Contacts.module.css'
 import toast, { Toaster } from 'react-hot-toast';
+import { useRouter } from 'next/router'
 
 const Contacts = ({contactsList}) => {
   const [contacts, setContacts] = useState(contactsList)
   const [searchKey, setSearchKey] = useState('')
   const [searchGen, setSearchGen] = useState('')
+  const router = useRouter()
+  const {gen, search} = router.query
+
+  useEffect(()=>{
+    gen ? setSearchGen(gen): setSearchGen('')
+    search ? setSearchKey(seerch): setSearchGen('')
+  },[])
 
   const searchHandler = async ()=>{
     try {
@@ -24,11 +32,13 @@ const Contacts = ({contactsList}) => {
     <>
     <Toaster position='top-right'/>
     <div className={styles.searchContainer}>
-      <input type="text" placeholder='enter name or family' onChange={(e)=>setSearchKey(e.target.value)} />
+      <input type="text" placeholder='enter name or family' onChange={(e)=>setSearchKey(e.target.value)} 
+        value={searchKey}
+      />
       <select onChange={(e)=>setSearchGen(e.target.value)}>
-        <option value="">all</option>
-        <option value="male">male</option>
-        <option value="female">female</option>
+        <option value="" selected={searchGen == ''} >all</option>
+        <option value="male" selected={searchGen == 'male'} >male</option>
+        <option value="female" selected={searchGen == 'female'} >female</option>
       </select>
       <button onClick={searchHandler}>search</button>
     </div>
@@ -52,11 +62,32 @@ const Contacts = ({contactsList}) => {
 }
 
 export default Contacts
-export async function getServerSideProps(){
+export async function getServerSideProps(context){
+  
   await connectDB()
-  const contacts = await Contact.find().lean()
-  /* const res = await fetch("http://localhost:3000/api/contacts")
-  const data = await res.json() */
+ 
+  let contacts = null
+        const {gen,search} = context.query
+
+        if(gen && search){
+            contacts = await Contact.find({$and:[{gender:gen},{$or:[{firstName:search},{lastName:search}]}]})
+        }else if(gen){
+            if(gen == 'male'){
+                contacts = await Contact.find({gender: 'male'})
+            }else if(gen == 'female'){
+                contacts = await Contact.find({gender: 'female'})
+            }else{
+                contacts = await Contact.find()
+            }
+        }else if(search){
+            contacts = await Contact.find({$or: [{firstName: search},{lastName:search}]})
+            if(contacts==false){
+                contacts = await Contact.find()
+            }
+        }else{
+            contacts = await Contact.find()
+        }
+
   return {
     props: {contactsList: JSON.parse(JSON.stringify(contacts))}
   }
