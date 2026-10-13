@@ -24,9 +24,7 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true,
-        trim: true,
-        minLength: 8,
-        maxLength: 20,
+        trim: true
     },
     role: {
         type: String,
