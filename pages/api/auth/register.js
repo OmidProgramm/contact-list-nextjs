@@ -3,7 +3,7 @@ import connectDB from "@/utils/connectDB"
 import bcrypt from 'bcrypt'
 
 export default async function handler(req,res){
-    await connectDB()
+    
     // Check Post Method
     if(req.method != 'POST'){
         return res.status(405).json({message: 'Method is not allowed'})
@@ -24,6 +24,9 @@ export default async function handler(req,res){
         if(!regexEmail.test(email) ){
             return res.status(422).json({message: 'Email invalid'})
         }
+        // Connect to DB
+        await connectDB()
+        
         // Check Unique Email
         const isUserExist = await User.findOne({email})
         if(isUserExist){
