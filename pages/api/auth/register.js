@@ -13,16 +13,16 @@ export default async function handler(req,res){
         // Validation
         const {firstName, lastName, email, password} = req.body
         if(!firstName.trim() || !lastName.trim() || !email.trim() || !password.trim()){
-            return res.status(422).json({message: 'Fill all fields'})
+            return res.status(409).json({message: 'Fill all fields'})
         }
 
         if(password.length < 8 || password.length > 20 ){
-            return res.status(422).json({message: 'Password length must be between 8 and 20 char'})
+            return res.status(409).json({message: 'Password length must be between 8 and 20 char'})
         }
         // Check pattern Email
         const regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
         if(!regexEmail.test(email) ){
-            return res.status(422).json({message: 'Email invalid'})
+            return res.status(409).json({message: 'Email invalid'})
         }
         // Connect to DB
         await connectDB()

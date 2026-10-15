@@ -57,6 +57,7 @@
     margin: 3px;
 }
 .spin{
+    margin-top: 5px;
     margin-left: 5px;
     animation: spinner 1s linear infinite;
 }
