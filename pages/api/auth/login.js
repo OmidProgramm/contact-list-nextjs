@@ -1,6 +1,7 @@
 import User from "@/models/User"
 import connectDB from "@/utils/connectDB"
 import bcrypt from 'bcrypt'
+const jwt = require('jsonwebtoken')
 
 export default async function handler(req,res){
     // Check Method
@@ -34,6 +35,11 @@ export default async function handler(req,res){
         if(!isValidPassword){
             return res.status(401).json({message: 'Email or Pssword is wrong'})
         }
+
+        // Create Token withe JWT
+        const token = jwt.sign({email:user.email, role: user.role},process.env.JWT_SECRET,{expiresIn:'1min'})
+        res.status(200).json({message:'logged in successfully.',token})
+
     } catch (error) {
         return res.status(500).json({message: 'Server Error'})
     }
