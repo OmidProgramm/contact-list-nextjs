@@ -12,18 +12,17 @@ const Login = () => {
     <>
        <div className={styles.container}>
         <form>
-          <input type="numbtexter" name='email' placeholder='your Email'/>
+          <input type="text" name='email' placeholder='your Email'/>
          <div className={styles.password}>
             <input type={showPass?"text":'password' }  name='password' placeholder='your Password'/>
             {
               showPass ? <FaRegEyeSlash size='20px' onClick={showPassHandler} /> : <FaRegEye size='20px' onClick={showPassHandler} /> 
             }
-           
          </div>
           <button>Login</button>
           <div className={styles.notRegistered} >
             Not registered
-            <Link href='/auth/register'>Create an accoutn</Link>
+            <Link href='/auth/register'> <span>Create an accoutn</span> </Link>
           </div>
         </form>
       </div>
