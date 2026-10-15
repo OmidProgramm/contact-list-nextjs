@@ -20,13 +20,44 @@
 .container input, .container select{
     border: 1px solid gray;
 }
+.container form > input{
+    all: unset;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 10px;
+}
+.container .password input{
+    all: unset;
+}
+.container .password{
+     border: 1px solid gray;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.container .password svg{
+    cursor: pointer;
+}
 .container button{
     text-align: center;
     background-color: rgb(3,157,3);
     font-weight: 600;
     color: white;
 }
+.notRegistered{
+    text-align: center;
+    color: gray;
+
+}
+.notRegistered a{
+    text-decoration: none;
+    color: rgb(3,157,3);
+    margin: 3px;
+}
 .spin{
+    margin-top: 5px;
     margin-left: 5px;
     animation: spinner 1s linear infinite;
 }

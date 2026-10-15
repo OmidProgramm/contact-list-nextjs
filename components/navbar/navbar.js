@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { MdAddBox } from "react-icons/md";
+import { MdAddBox,MdDashboard } from "react-icons/md";
+import { CgLogIn, CgLogOut } from "react-icons/cg";
 import { FaListOl } from "react-icons/fa6";
 import styles from './navbar.module.css'
 import { useRouter } from 'next/router';
@@ -10,11 +11,17 @@ const Navbar = () => {
   return (
     <div className= {styles.navbar}>
         <div className={styles.menu}>
+            <Link href='/auth/login' className={route == '/auth/login'? styles.active:''}>
+                <CgLogIn /> Log In
+            </Link>
             <Link href='/contacts/add' className={route == '/contacts/add'? styles.active:''}>
                 <MdAddBox /> Add Contact
             </Link>
             <Link href='/contacts' className={route == '/contacts'? styles.active:''}>
                 <FaListOl /> Contacts
+            </Link>
+            <Link href='/dashboard' className={route == '/dashboard'? styles.active:''}>
+                <MdDashboard /> Dashboard
             </Link>
         </div>
     </div>
