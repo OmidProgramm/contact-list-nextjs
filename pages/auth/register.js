@@ -8,14 +8,14 @@ import { useRouter } from 'next/router';
 
 const Register = () => {
     const router = useRouter()
-  const [showPass, setShowPass] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [formData,setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-  })
+    const [showPass, setShowPass] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [formData,setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+    })
 
   const showPassHandler = ()=>setShowPass(!showPass)
 
@@ -33,15 +33,7 @@ const Register = () => {
         return toast.error(data.message,{duration:5000})
     }
     toast.success(data.message,{duration:5000})
-    setFormData({
-            firstName: '',
-            lastName: '',
-            email: '',
-            password: '',
-        }
-    )
-    router.replace('/auth/login')
-    
+    router.replace('/auth/login') 
   }
 
   return (

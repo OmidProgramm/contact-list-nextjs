@@ -1,7 +1,9 @@
+var cookie = require("cookie");
 import User from "@/models/User"
 import connectDB from "@/utils/connectDB"
 import bcrypt from 'bcrypt'
 const jwt = require('jsonwebtoken')
+
 
 export default async function handler(req,res){
     // Check Method
@@ -37,10 +39,22 @@ export default async function handler(req,res){
         }
 
         // Create Token withe JWT
-        const token = jwt.sign({email:user.email, role: user.role},process.env.JWT_SECRET,{expiresIn:'1min'})
-        res.status(200).json({message:'logged in successfully.',token})
+        const token = jwt.sign({email:user.email, role: user.role},process.env.JWT_SECRET,{expiresIn:'5min'})
+        // set Cookie
+        res.setHeader(
+        "Set-Cookie",
+            cookie.stringifySetCookie({
+                name: "token",
+                value: String(token),
+                httpOnly: true,
+                maxAge: 60 * 60 * 24 * 7, // 1 week
+            }),
+        );
+
+        res.status(200).json({message:'logged in successfully.'})
 
     } catch (error) {
+        console.error('Login API Error:', error)
         return res.status(500).json({message: 'Server Error'})
     }
 }
