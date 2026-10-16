@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styles from '@/styles/addContact.module.css'
+import styles from '@/styles/AddContact.module.css'
 import Link from 'next/link'
 import toast from 'react-hot-toast';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";

@@ -4,6 +4,7 @@ import { verify } from 'jsonwebtoken'
 import { redirect } from 'next/dist/server/api-utils'
 import React from 'react'
 import styles from '@/styles/Dashboard.module.css'
+import validateToken from '@/utils/auth'
 
 const Dashboard = ({user}) => {
   return (
@@ -17,17 +18,8 @@ const Dashboard = ({user}) => {
 export default Dashboard
 
 export async function getServerSideProps(context){
-  // Get Token from Cookies
-  const {token} = context.req.cookies
-  // Check Token exist
-  if(!token){ return { redirect : { destination : "/auth/login"}}}
-  // Verify Token
-  let tokenPayload = null
-  try {
-    tokenPayload = verify(token,process.env.JWT_SECRET)
-  } catch (error) {
-    return { redirect : { destination : "/auth/login"}}
-  }
+  const tokenPayload = validateToken(context)
+  if(!tokenPayload){ return { redirect: {destination:"/auth/login"}}}
   await connectDB()
   const user = await User.findOne({email:tokenPayload.email}).select('firstName lastName -_id')
 
