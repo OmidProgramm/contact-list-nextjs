@@ -47,7 +47,8 @@ export default async function handler(req,res){
                 name: "token",
                 value: String(token),
                 httpOnly: true,
-                maxAge: 60 * 60 * 24 * 7, // 1 week
+                path:'/',
+                maxAge: 5 * 60, 
             }),
         );
 
