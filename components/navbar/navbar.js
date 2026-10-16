@@ -4,17 +4,27 @@ import { CgLogIn, CgLogOut } from "react-icons/cg";
 import { FaListOl } from "react-icons/fa6";
 import styles from './navbar.module.css'
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 
-
-
-const Navbar = ({checkAuth}) => {
+const Navbar = ({checkAuth,setCheckAuth}) => {
     const {route} = useRouter()
-
+    const logoutHandler = async ()=>{
+        const res = await fetch('/api/auth/logout')
+        const data = await res.json()
+        if(res.status == 200){
+            toast.success(data.message)
+            setCheckAuth(false)
+        }else{
+            toast.error('Error')
+        }
+    }
   return (
     <div className= {styles.navbar}>
         <div className={styles.menu}>
             {
-                checkAuth ?  <Link href='/auth/login' className={route == '/auth/login'? styles.active:''}>
+                checkAuth ?  <Link href='/auth/login' className={route == '/auth/login'? styles.active:''}
+                onClick={logoutHandler}
+                >
                 <CgLogOut /> Logout
             </Link> :
              <Link href='/auth/login' className={route == '/auth/login'? styles.active:''}>
