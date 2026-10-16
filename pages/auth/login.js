@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import { FaSpinner } from "react-icons/fa6";
 
-const Login = () => {
+const Login = ({setCheckAuth}) => {
   const router = useRouter()
   const [showPass, setShowPass] = useState(true)
   const [email, setEmail] = useState('')
@@ -29,6 +29,7 @@ const Login = () => {
         return toast.error(data.message,{duration:5000})
     }
     toast.success(data.message,{duration:5000})
+    setCheckAuth(true)
     router.replace('/dashboard') 
   }
 
