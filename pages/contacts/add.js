@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
 import { ImSpinner7 } from "react-icons/im";
-import styles from '@/styles/addContact.module.css'
+import styles from '@/styles/AddContact.module.css'
+import validateToken from '@/utils/auth';
+import { redirect } from 'next/dist/server/api-utils';
 
 const AddConntact = () => {
   const [loading, setLoading] = useState(false)
@@ -93,3 +95,12 @@ const AddConntact = () => {
 }
 
 export default AddConntact
+
+export async function getServerSideProps(context){
+  const tokenPayload = validateToken(context)
+  if(!tokenPayload){ return { redirect: {destination:"/auth/login"}}}
+  
+  return {
+    props:{}
+  }
+}
