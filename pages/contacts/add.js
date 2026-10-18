@@ -5,7 +5,7 @@ import styles from '@/styles/AddContact.module.css'
 import validateToken from '@/utils/auth';
 import { redirect } from 'next/dist/server/api-utils';
 
-const AddConntact = () => {
+const AddConntact = ({user_id}) => {
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     firstName:'',
@@ -41,7 +41,7 @@ const AddConntact = () => {
       const res = await fetch("http://localhost:3000/api/contacts",{
         method: "POST",
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(formData)
+        body: JSON.stringify({...formData,user_id})
       })
       const data = await res.json()
       setLoading(false)
@@ -51,7 +51,6 @@ const AddConntact = () => {
       if(res.status ==500){
         return toast.error(data.message)
       }
-      toast.success("new Contact added successfully.")
       setFormData(
         {
           firstName:'',
@@ -61,6 +60,7 @@ const AddConntact = () => {
           phone:''
         }
       )
+      toast.success("new Contact added successfully.")
   }
   return (
     <>
@@ -68,20 +68,25 @@ const AddConntact = () => {
       <div className={styles.container}>
         <form>
           <input type="text" name='firstName' placeholder='First Name'
+          value={formData.firstName}
           onChange={(e)=>setFormData({...formData,firstName:e.target.value})}
           />
           <input type="text" name='lastName' placeholder='Last Name'
+          value={formData.lastName}
           onChange={(e)=>setFormData({...formData,lastName:e.target.value})}
           />
           <input type="number" name='age' placeholder='your Age'
+          value={formData.age}
           onChange={(e)=>setFormData({...formData,age:e.target.value})}
           />
-          <select value={formData.gender} onChange={(e)=>setFormData({...formData,gender:e.target.value})}>
+          <select value={formData.gender} 
+          onChange={(e)=>setFormData({...formData,gender:e.target.value})}>
             <option value="" hidden disabled>Gender</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
           <input type="text" name='phone' placeholder='your Phone'
+          value={formData.phone}
           onChange={(e)=>setFormData({...formData,phone:e.target.value})}
           />
           <button onClick={addContactHandler}>
@@ -99,8 +104,9 @@ export default AddConntact
 export async function getServerSideProps(context){
   const tokenPayload = validateToken(context)
   if(!tokenPayload){ return { redirect: {destination:"/auth/login"}}}
+
   
   return {
-    props:{}
+    props:{user_id:tokenPayload.user_id}
   }
 }

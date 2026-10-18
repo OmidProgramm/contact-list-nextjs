@@ -24,7 +24,7 @@ const handler = async (req,res)=>{
                 contacts = await Contact.find()
             }
         }else{
-            contacts = await Contact.find()
+            contacts = await Contact.find({},'-__v').populate('user_id', '-password -role -__v')
         }
         res.status(200).json(contacts)
     }else if(req.method == 'POST'){

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import styles from '@/styles/Contacts.module.css'
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router'
+import validateToken from '@/utils/auth'
 
 const Contacts = ({contactsList}) => {
   const [contacts, setContacts] = useState(contactsList)
@@ -62,30 +63,42 @@ const Contacts = ({contactsList}) => {
 }
 
 export default Contacts
+
 export async function getServerSideProps(context){
-  
+  const tokenPayload = validateToken(context)
+  const {user_id} = tokenPayload
   await connectDB()
  
   let contacts = null
         const {gen,search} = context.query
-
         if(gen && search){
-            contacts = await Contact.find({$and:[{gender:gen},{$or:[{firstName:search},{lastName:search}]}]})
+          if(gen == 'male' || gen == 'female'){
+            contacts = await Contact.find({
+              gender:gen,
+              $or:[{firstName:search},{lastName:search}],
+              user_id
+            })
+          }else{
+            contacts = await Contact.find({
+              $or:[{firstName:search},{lastName:search}],
+              user_id
+            })
+          }
         }else if(gen){
             if(gen == 'male'){
-                contacts = await Contact.find({gender: 'male'})
+                contacts = await Contact.find({gender:'male',user_id})
             }else if(gen == 'female'){
-                contacts = await Contact.find({gender: 'female'})
+                contacts = await Contact.find({gender:'female',user_id})
             }else{
-                contacts = await Contact.find()
-            }
+                contacts = await Contact.find({user_id})
+            } 
         }else if(search){
-            contacts = await Contact.find({$or: [{firstName: search},{lastName:search}]})
-            if(contacts==false){
-                contacts = await Contact.find()
-            }
+            contacts = await Contact.find({
+              $or: [{firstName: search},{lastName:search}],
+              user_id
+            })
         }else{
-            contacts = await Contact.find()
+            contacts = await Contact.find({user_id})
         }
 
   return {
