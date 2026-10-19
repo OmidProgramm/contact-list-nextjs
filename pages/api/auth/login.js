@@ -49,6 +49,7 @@ export default async function handler(req,res){
                 httpOnly: true,
                 path:'/',
                 maxAge: 5 * 60, 
+                sameSite:'strict'
             }),
         );
 
