@@ -6,6 +6,7 @@ const contactSchema = new Schema({
     age: {type: Number,min:[18,'Age must be minimum 18 years old']},
     gender: {type: String,trim:true},
     phone: {type: String,trim:true,maxLength:[10,'Last Name must be more than 10 Number'],match:[/0\d{9}/,'Enter your Number']},
+    favorite:{type:Boolean,default:false},
     user_id: {type: mongoose.Types.ObjectId, ref:'User' }
 });
 

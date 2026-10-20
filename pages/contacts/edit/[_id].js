@@ -2,7 +2,7 @@ import { useParams, useRouter } from 'next/router'
 import React, { useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast';
 import { ImSpinner7 } from "react-icons/im";
-import styles from '@/styles/addContact.module.css'
+import styles from '@/styles/AddContact.module.css'
 import Contact from '@/models/Contact';
 
 const EditContact = ({contact}) => {

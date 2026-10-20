@@ -3,7 +3,7 @@ import connectDB from "@/utils/connectDB";
 import generateFilter from '@/utils/generateFilter'
 
 const handler = async (req, res) => {
-  connectDB();
+  await connectDB();
   if (req.method == "GET") {
      getHandler(req,res)
     
