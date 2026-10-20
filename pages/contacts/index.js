@@ -5,27 +5,40 @@ import React, { useEffect, useState } from 'react'
 import styles from '@/styles/Contacts.module.css'
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router'
+import validateToken from '@/utils/auth'
+import generateFilter from '@/utils/generateFilter'
+import {MdOutlineFavoriteBorder } from 'react-icons/md'
 
-const Contacts = ({contactsList}) => {
+const Contacts = ({contactsList,user_id}) => {
   const [contacts, setContacts] = useState(contactsList)
   const [searchKey, setSearchKey] = useState('')
   const [searchGen, setSearchGen] = useState('')
+  const [favStatus, setFavStatus] = useState(false)
   const router = useRouter()
   const {gen, search} = router.query
 
   useEffect(()=>{
     gen ? setSearchGen(gen): setSearchGen('')
-    search ? setSearchKey(seerch): setSearchGen('')
+    search ? setSearchKey(search): setSearchGen('')
   },[])
 
   const searchHandler = async ()=>{
     try {
-      const res = await fetch(`/api/contacts?gen=${searchGen}&search=${searchKey}`)
+      const res = await fetch(`/api/contacts?user_id=${user_id}&gen=${searchGen}&search=${searchKey}`)
       const data = await res.json()
       setContacts(data)
-    } catch (error) {
+    } catch (error) { 
       toast.error("Server Error")
     }
+  }
+  const showFavoriteHandler = ()=>{
+    if(favStatus){
+      setContacts(contactsList)
+    }else{
+      const favoriteContacts = contacts.filter(contact=> contact.favorite == true)
+      setContacts(favoriteContacts)
+    }
+    setFavStatus(!favStatus)
   }
 
   return (
@@ -41,6 +54,9 @@ const Contacts = ({contactsList}) => {
         <option value="female" selected={searchGen == 'female'} >female</option>
       </select>
       <button onClick={searchHandler}>search</button>
+      <MdOutlineFavoriteBorder size='35px' fill={favStatus?'red': 'black' } 
+        onClick={showFavoriteHandler}
+      />
     </div>
     {
       contacts.length > 0 && (
@@ -62,33 +78,25 @@ const Contacts = ({contactsList}) => {
 }
 
 export default Contacts
-export async function getServerSideProps(context){
-  
-  await connectDB()
- 
-  let contacts = null
-        const {gen,search} = context.query
 
-        if(gen && search){
-            contacts = await Contact.find({$and:[{gender:gen},{$or:[{firstName:search},{lastName:search}]}]})
-        }else if(gen){
-            if(gen == 'male'){
-                contacts = await Contact.find({gender: 'male'})
-            }else if(gen == 'female'){
-                contacts = await Contact.find({gender: 'female'})
-            }else{
-                contacts = await Contact.find()
-            }
-        }else if(search){
-            contacts = await Contact.find({$or: [{firstName: search},{lastName:search}]})
-            if(contacts==false){
-                contacts = await Contact.find()
-            }
-        }else{
-            contacts = await Contact.find()
-        }
+export async function getServerSideProps(context){
+  const tokenPayload = validateToken(context)
+   if (!tokenPayload) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false
+      }
+    }
+  }
+  const user_id = tokenPayload.user_id
+  const filter = generateFilter(context.query,user_id)
+ 
+  await connectDB()
+  const contacts =  await Contact.find(filter)
 
   return {
-    props: {contactsList: JSON.parse(JSON.stringify(contacts))}
+    props: {contactsList: JSON.parse(JSON.stringify(contacts)),user_id: user_id.toString()} 
   }
 }
+

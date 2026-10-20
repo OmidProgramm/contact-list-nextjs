@@ -39,7 +39,7 @@ export default async function handler(req,res){
         }
 
         // Create Token withe JWT
-        const token = jwt.sign({email:user.email, role: user.role},process.env.JWT_SECRET,{expiresIn:'5min'})
+        const token = jwt.sign({email:user.email, user_id:user._id, role: user.role},process.env.JWT_SECRET,{expiresIn:'5min'})
         // set Cookie
         res.setHeader(
         "Set-Cookie",
@@ -49,6 +49,7 @@ export default async function handler(req,res){
                 httpOnly: true,
                 path:'/',
                 maxAge: 5 * 60, 
+                sameSite:'strict'
             }),
         );
 

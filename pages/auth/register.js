@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { FaSpinner } from "react-icons/fa6";
 import { useRouter } from 'next/router';
+import validateToken from '@/utils/auth';
 
 const Register = () => {
     const router = useRouter()
@@ -75,3 +76,15 @@ const Register = () => {
 }
 
 export default Register
+
+export async function getServerSideProps(context){
+  const tokenPayload = validateToken(context)
+  if(tokenPayload){
+    return {
+      redirect: {destination: '/dashboard'}
+    }
+  }
+  return {
+    props: {}
+  }
+}

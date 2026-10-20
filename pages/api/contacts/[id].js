@@ -6,6 +6,7 @@ const handler = async (req,res)=>{
     connectDB()
 
     const {id} = req.query
+    
     if(isValidObjectId(id)){
         if(req.method == 'GET'){
             const contact = await Contact.findById(id)
@@ -23,8 +24,12 @@ const handler = async (req,res)=>{
             }
         }else if(req.method == 'PUT'){
             const result = await Contact.findByIdAndUpdate(id,req.body)
-            console.log(result)
             res.status(200).json({message: 'Contact updated successfully.'})
+        }else if(req.method == 'PATCH'){
+            const contact = await Contact.findOne({_id: id})
+            contact.favorite = !contact.favorite
+            contact.save()
+            res.status(201).json({message: "Contact updated successfully."})
         }
     }else{
         res.status(404).json({message: 'Contact ID is invalid'})

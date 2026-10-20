@@ -5,7 +5,7 @@ import { AiFillEdit } from 'react-icons/ai'
 import { MdDeleteForever, MdOutlineFavoriteBorder } from 'react-icons/md'
 import styles from './contactItem.module.css'
 
-const ContactItem = ({_id,firstName, lastName, age, gender,phone,contacts,setContacts}) => {
+const ContactItem = ({_id,firstName, lastName, age, gender,phone,favorite,contacts,setContacts}) => {
     const deleteContactHandler = async ()=>{
         try {
             const res = await fetch(`/api/contacts/${_id}`,{method:'DELETE'})
@@ -23,6 +23,21 @@ const ContactItem = ({_id,firstName, lastName, age, gender,phone,contacts,setCon
             return toast.error('Server error 500')
         
         }
+    }
+    const likeContactHandler = async ()=>{
+        try {
+            const res = await fetch(`/api/contacts/${_id}`,{method:'PATCH'})
+            const data = await res.json()
+            const updateContacts = contacts.map((contact)=>{
+                if(contact._id == _id){
+                    contact.favorite = !contact.favorite
+                }
+                return contact
+            })
+            setContacts(updateContacts)
+        } catch (error) {
+            return toast.error('Server error 500')
+        } 
     }
     return (
         <>
@@ -53,7 +68,8 @@ const ContactItem = ({_id,firstName, lastName, age, gender,phone,contacts,setCon
                         </Link>
                     </div>
                     <div className="favorite">
-                        <MdOutlineFavoriteBorder/>
+                        <MdOutlineFavoriteBorder fill={favorite? 'red': 'black'}
+                        onClick={()=>likeContactHandler(_id)}/>
                     </div>
                 </div>
             </div>
