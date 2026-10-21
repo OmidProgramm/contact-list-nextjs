@@ -1,6 +1,8 @@
 import React from 'react'
+import connectDB from "@/utils/connectDB";
 
 export default async function handler (req,res){
+    await connectDB();
     if(req.method == 'POST'){
         const {phone} = req.body
         const code = Math.floor(Math.random() * 9000 + 1000)

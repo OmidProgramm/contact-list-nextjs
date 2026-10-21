@@ -38,6 +38,7 @@
     cursor: pointer;
 }
 .otpForm .spiner{
+    margin-left: 8px;
     animation: spinner 1s infinite;
 }
 .otpForm .prevStep{
