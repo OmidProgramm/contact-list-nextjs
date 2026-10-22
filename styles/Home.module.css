@@ -1,0 +1,59 @@
+.otpForm{
+    width: 400px;
+    margin: 60px auto;
+    padding: 30px 40px;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0px 3px 8px rgba(0,0,0,0.24);
+}
+.otpForm input, .otpForm button{
+    padding: 10px;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid gray;
+    width: 100%;
+    margin-top: 15px;
+}
+.otpForm button{
+    background: rgb(169, 38, 230);
+    color: white;
+    font-weight: bold;
+    border: none;
+    font-size: 16px;
+}
+.otpForm h2{
+    text-align: center;
+    margin-bottom: 30px;
+    font-family: sans-serif;
+}
+.otpForm .tryAgain{
+    font-size: 13px;
+    color: gray;
+    margin-top: 15px;
+}
+.otpForm .sendAgain{
+    font-size: 14px;
+    color: rgb(169, 38, 230);
+    margin-top: 15px;
+    cursor: pointer;
+}
+.otpForm .spiner{
+    margin-left: 8px;
+    animation: spinner 1s infinite;
+}
+.otpForm .prevStep{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 20px;
+    color: rgb(169, 38, 230);
+    cursor: pointer;
+}
+.otpForm .prevStep span{
+    font-size: 13px;
+}
+@keyframes spinner{
+    to{
+        transform: rotate(360deg);
+    }
+}
