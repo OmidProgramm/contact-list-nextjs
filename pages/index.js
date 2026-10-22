@@ -22,7 +22,7 @@ export default function Home() {
     setLoading(false)
     if(res.status == 200){
       setIsCodeSend(true)
-      setTimer(20)
+      setTimer(30)
     }
   }
   const prevStepHandler = ()=>{
@@ -37,7 +37,7 @@ export default function Home() {
           setTimer(timer => timer - 1)
         },1000)
       }
-      return () =>{
+      return () => {
         clearInterval(interval)
       }
   },[timer])
@@ -79,14 +79,10 @@ export default function Home() {
                   <p className={styles.tryAgain}>remind Time: {timer} </p>
                 ):(<p className={styles.sendAgain}>send again..</p>)
               }
-              
               <button>Submit Code</button>
             </div>
         )
       }
-
-     
-
      </form>
     </>
   );
